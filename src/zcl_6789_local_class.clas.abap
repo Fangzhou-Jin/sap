@@ -1,14 +1,91 @@
-class ZCL_6789_LOCAL_CLASS definition
-  public
-  final
-  create public .
+CLASS zcl_6789_local_class DEFINITION
+  PUBLIC
+  FINAL
+  CREATE PUBLIC.
 
-public section.
-protected section.
-private section.
+  PUBLIC SECTION.
+
+    INTERFACES if_oo_adt_classrun.
+
+  PROTECTED SECTION.
+
+  PRIVATE SECTION.
+
 ENDCLASS.
 
 
 
-CLASS ZCL_6789_LOCAL_CLASS IMPLEMENTATION.
+CLASS zcl_6789_local_class IMPLEMENTATION.
+
+  METHOD if_oo_adt_classrun~main.
+
+    DATA connection  TYPE REF TO lcl_connection.
+    DATA connections TYPE TABLE OF REF TO lcl_connection.
+
+**********************************************************************
+* First Instance
+**********************************************************************
+
+    TRY.
+
+        connection = NEW #(
+          i_carrier_id    = 'LH'
+          i_connection_id = '0400' ).
+
+        APPEND connection TO connections.
+
+      CATCH cx_abap_invalid_value.
+
+        out->write( `Method call failed` ).
+
+    ENDTRY.
+
+**********************************************************************
+* Second Instance
+**********************************************************************
+
+    TRY.
+
+        connection = NEW #(
+          i_carrier_id    = 'AA'
+          i_connection_id = '0017' ).
+
+        APPEND connection TO connections.
+
+      CATCH cx_abap_invalid_value.
+
+        out->write( `Method call failed` ).
+
+    ENDTRY.
+
+**********************************************************************
+* Third Instance
+**********************************************************************
+
+    TRY.
+
+        connection = NEW #(
+          i_carrier_id    = 'SQ'
+          i_connection_id = '0001' ).
+
+        APPEND connection TO connections.
+
+      CATCH cx_abap_invalid_value.
+
+        out->write( `Method call failed` ).
+
+    ENDTRY.
+
+**********************************************************************
+* Output
+**********************************************************************
+
+    LOOP AT connections INTO connection.
+
+      out->write( connection->get_output( ) ).
+
+    ENDLOOP.
+
+  ENDMETHOD.
+
 ENDCLASS.
